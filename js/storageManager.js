@@ -52,10 +52,10 @@ try {
     activities.push(newActivity);
     localStorage.setItem(storageKey, JSON.stringify(activities));
 
-    console.log('Activity berhasil disimpan:', newActivity);
+    return {success: true, data:newActivity}
     
     } catch (error) {
-        console.log('Gagal menyimpan activity:', error.message);   
+        return {success: false, message:error.message }   
     }
 }
 
@@ -92,7 +92,7 @@ try {
 
         // Filter dari budget
         // Tampilkan activity yang budgetnya lebih besar / sama dengan budget user
-        if (filterCriteria.budget && activity.budget > filterCriteria.budget) {
+        if (filterCriteria.budget !== 0 && activity.budget > filterCriteria.budget) {
             match = false;
         }
 
@@ -117,7 +117,7 @@ try {
     return filtered;
 
 } catch (error) {
-    console.log('Gagal mengambil data:', error.message);
+    // console.log('Gagal mengambil data:', error.message);
     return [];
 }
 
