@@ -92,7 +92,7 @@ try {
 
         // Filter dari budget
         // Tampilkan activity yang budgetnya lebih besar / sama dengan budget user
-        if (filterCriteria.budget !== 0 && activity.budget > filterCriteria.budget) {
+        if (filterCriteria.budget !== undefined && activity.budget > filterCriteria.budget) {
             match = false;
         }
 
