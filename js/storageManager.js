@@ -26,12 +26,3 @@ function updateActivity(id, updatedData) {
 function deleteActivity(id) {
 // Write a function that filters out a specific object by its ID and saves the modified array.
 }
-
-function getRandomActivity(activityArray) {
-// Write an algorithm using Math.random() to select a single activity.
-
-// Crucial Rule: The randomization must run against the currently filtered list 
-// provided by the getActivities function, not the master Local Storage list.
-
-// Include a safety check that prevents the function from running if the provided array length is 0.
-}
