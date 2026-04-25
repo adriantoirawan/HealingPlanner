@@ -1,7 +1,0 @@
-function renderCards() {
-
-}
-
-function showRandomResult() {
-    
-}
