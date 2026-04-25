@@ -1,3 +1,0 @@
-function getRandomActivity(activityArray) {
-    
-}
