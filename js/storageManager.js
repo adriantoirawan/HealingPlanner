@@ -1,3 +1,13 @@
+// Define the key used for Local Storage
+const storageKey = 'healing_activities';
+
+// 1. Initialization Function
+function initializeStorage() {
+    if (!localStorage.getItem(storageKey)) {
+        localStorage.setItem(storageKey, JSON.stringify([]));
+    }
+}
+
 function saveActivity(activityData) {
 // Write logic to assign a unique ID using Date.now() upon object creation.
 
@@ -26,3 +36,7 @@ function updateActivity(id, updatedData) {
 function deleteActivity(id) {
 // Write a function that filters out a specific object by its ID and saves the modified array.
 }
+
+
+// Run initialization immediately when the file loads
+initializeStorage();
