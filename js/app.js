@@ -1,61 +1,88 @@
-const addNewWishlistButton = document.getElementById("add-wishlist-button");
+// Global save function
+function executeSave(title, imageBase64, location, budget, description) {
+    const activityData = {
+        title: title,
+        image: imageBase64, 
+        location: location,
+        budget: Number(budget),
+        description: description,
+        tags: []
+    };
 
-addNewWishlistButton.addEventListener("click", (e) => {
-    // 1. Prevent the page from reloading when the button is clicked
+    const result = saveActivity(activityData);
+
+    if (result.success) {
+        alert("Activity berhasil disimpan!");
+        return true; // Let the caller know it succeeded
+    } else {
+        alert("Gagal menyimpan: " + result.message);
+        return false; // Let the caller know it failed
+    }
+}
+
+// Add button event listener
+const addNewWishlistButton = document.getElementById("add-wishlist-button");
+addNewWishlistButton.addEventListener("click", function(e) {
     e.preventDefault(); 
 
-    // 2. Safely grab the HTML elements using the EXACT IDs from your HTML file
-    const titleInput = document.getElementById("healing-title");
+    // 1. Grab all the input values right now
+    const titleVal = document.getElementById("healing-title").value;
+    const locationVal = document.getElementById("healing-location").value;
+    const budgetVal = document.getElementById("healing-budget").value;
+    const descriptionVal = document.getElementById("healing-description").value;
     const imageInput = document.getElementById("healing-image");
-    const locationInput = document.getElementById("healing-location");
-    const budgetInput = document.getElementById("healing-budget");
-    const descriptionInput = document.getElementById("healing-description");
-
-    // 3. Prevent crash if IDs are changed in the future
-    if (!titleInput || !imageInput || !locationInput || !budgetInput || !descriptionInput) {
-        console.error("Developer Error: HTML IDs do not match JavaScript.");
-        alert("Mohon maaf, terjadi kesalahan pada sistem form. Silakan refresh halaman.");
+    
+    if (!imageInput) {
+        alert("Mohon maaf, terjadi kesalahan pada sistem form.");
         return; 
     }
 
-    // 4. Since there is no text input for tags in the HTML yet, we will pass an empty array 
-    // to prevent errors in storageManager.js
-    const tagsArray = [];
+    const imageFile = imageInput.files[0];
 
-    // 5. Package the data
-    const activityData = {
-        title: titleInput.value,
-        image: imageInput.value, // Note: This will capture a fake path like "C:\fakepath\image.png"
-        location: locationInput.value,
-        budget: Number(budgetInput.value),
-        description: descriptionInput.value,
-        tags: tagsArray
-    };
-
-    // 6. Save using your storage manager
-    const result = saveActivity(activityData);
-
-    // 7. Notify the user
-    if (result.success) {
-        alert("Activity berhasil ditambahkan!");
-        
-        // Optional: clear the form so they can add another one
-        titleInput.value = '';
+    // Helper function to clear this specific form
+    function clearForm() {
+        document.getElementById("healing-title").value = '';
+        document.getElementById("healing-location").value = '';
+        document.getElementById("healing-budget").value = '';
+        document.getElementById("healing-description").value = '';
         imageInput.value = '';
-        locationInput.value = '';
-        budgetInput.value = '';
-        descriptionInput.value = '';
-
-        // renderCards(); 
-    } else {
-        alert("Gagal menyimpan: " + result.message); 
     }
+
+    // 2. If NO image, pass the values to executeSave immediately
+    if (!imageFile) {
+        const isSuccess = executeSave(titleVal, "", locationVal, budgetVal, descriptionVal);
+        if (isSuccess) {
+            clearForm();
+        }
+        return;
+    }
+
+    // 3. If image EXISTS, check size, read it, then pass values to executeSave
+    if (imageFile.size > 1048576) { 
+        alert("Ukuran gambar terlalu besar! Maksimal 1MB.");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const base64String = event.target.result;
+        
+        // Pass the grabbed values + the new base64 string
+        const isSuccess = executeSave(titleVal, base64String, locationVal, budgetVal, descriptionVal);
+        if (isSuccess) {
+            clearForm(); 
+        }
+    };
+    reader.readAsDataURL(imageFile);
 });
 
+
+// --- UI Rendering Functions ---
+
 function renderCards() {
-    // Logic to display cards will go here
+    // Logic to display cards
 }
 
 function showRandomResult() {
-    // Logic for random result will go here
+    // Logic to display a random activity
 }
