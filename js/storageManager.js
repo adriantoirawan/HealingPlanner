@@ -62,65 +62,72 @@ try {
 
 
 function getActivities(filterCriteria) {
-// Write a function to fetch and parse the data from Local Storage.
-try {
-    var data = localStorage.getItem(storageKey)
-    
-    // Include a fallback to return an empty array [] if Local Storage is currently empty.
-    if (!data) {
-        return [];
-    }
-
-    var activities = JSON.parse(data);
-
-    // parse tags dari string diubah kembali jadi array
-    for (let i = 0; i < activities.length; i++) {
-        activities[i].tags = JSON.parse(activities[i].tags);
-    }
-
-    // Jika filtercreteria tidak ada, return semua data
-    if (!filterCriteria) {
-        return activities;
-    }
-    
-    // Jika filtercriteria ada ambil datanya
-    var filtered = [];
-
-    for (let i = 0; i < activities.length; i++) {
-        var activity = activities[i];
-        var match = true;
-
-        // Filter dari budget
-        // Tampilkan activity yang budgetnya lebih besar / sama dengan budget user
-        if (filterCriteria.budget !== undefined && activity.budget > filterCriteria.budget) {
-            match = false;
+    try {
+        var data = localStorage.getItem(storageKey);
+        
+        if (!data) {
+            return [];
         }
 
-        // Filter dari tags
-        if (filterCriteria.tag) {
-            var tagFound = false;
+        var activities = JSON.parse(data);
 
-            for (let j = 0; j < activity.tags.length; j++) {
-                if (activity.tags[j] === filterCriteria.tag) {
-                    tagFound = true;
-                    break;
+        // SAFE TAG PARSING: Prevent crashes from old or corrupted data
+        for (let i = 0; i < activities.length; i++) {
+            try {
+                // Only try to parse if it's actually a string
+                if (typeof activities[i].tags === 'string') {
+                    activities[i].tags = JSON.parse(activities[i].tags);
+                } else if (!activities[i].tags) {
+                    activities[i].tags = []; // Fallback if tags are missing entirely
                 }
+            } catch (tagError) {
+                // If parsing fails, just default to an empty array instead of crashing everything
+                activities[i].tags = [];
             }
-            if (!tagFound) {
+        }
+
+        // Jika filterCriteria tidak ada, return semua data
+        if (!filterCriteria) {
+            return activities;
+        }
+        
+        // Jika filterCriteria ada ambil datanya
+        var filtered = [];
+
+        for (let i = 0; i < activities.length; i++) {
+            var activity = activities[i];
+            var match = true;
+
+            // Filter dari budget
+            if (filterCriteria.budget !== undefined && activity.budget > filterCriteria.budget) {
                 match = false;
             }
+
+            // Filter dari tags
+            if (filterCriteria.tag) {
+                var tagFound = false;
+
+                for (let j = 0; j < activity.tags.length; j++) {
+                    if (activity.tags[j] === filterCriteria.tag) {
+                        tagFound = true;
+                        break;
+                    }
+                }
+                if (!tagFound) {
+                    match = false;
+                }
+            }
+            if (match) {
+                filtered.push(activity);
+            } 
         }
-        if (match) {
-            filtered.push(activity);
-        } 
+        return filtered;
+
+    } catch (error) {
+        // I uncommented this so you can see if something else breaks!
+        console.error('Gagal mengambil data:', error.message);
+        return [];
     }
-    return filtered;
-
-} catch (error) {
-    // console.log('Gagal mengambil data:', error.message);
-    return [];
-}
-
 }
 
 function updateActivity(id, updatedData) {
