@@ -20,25 +20,29 @@
 
   <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary px-5">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Healing Planner</a>
+        <a class="navbar-brand ps-5" href="index.html">Healing Planner</a>
         <button
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" href="#">Home</a>
+              <a class="nav-link active" aria-current="page" href="index.html"
+                >Home</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">About Us</a>
+              <a class="nav-link" href="about-us.html">About Us</a>
             </li>
           </ul>
         </div>
@@ -46,7 +50,7 @@
     </nav>
 
     <!-- Content -->
-    <div class="container-fluid mt-4 px-5">
+    <div class="container mt-4 px-5">
       <h2>Add New Healing Wishlist</h2>
       <p class="text-secondary pb-3">Fill in your dream healing activity!</p>
 
@@ -66,7 +70,7 @@
         <!-- Image -->
         <div class="mb-4">
           <label class="form-label">Healing Activity Image</label>
-          <input type="file" class="form-control" id="healing-image"/>
+          <input type="file" class="form-control" id="healing-image" />
         </div>
 
         <!-- Location -->
@@ -82,7 +86,7 @@
 
         <!-- Budget -->
         <div class="mb-4">
-          <label class="form-label">Budget</label>
+          <label class="form-label">Estimated Budget</label>
           <input
             type="number"
             class="form-control"
@@ -105,17 +109,31 @@
 
         <!-- Tags -->
         <div class="mb-4">
-          <label class="form-label d-block"><i class="bi bi-tag"></i> Tags</label>
+          <label class="form-label d-block"
+            ><i class="bi bi-tag"></i> Tags</label
+          >
           <div class="input-group mb-2">
-            <input type="text" class="form-control" id="tag-input" placeholder="e.g. Beach, Nature, Solo" />
-            <button class="btn btn-outline-secondary" type="button" id="add-tag-btn">Add Tag</button>
+            <input
+              type="text"
+              class="form-control"
+              id="tag-input"
+              placeholder="e.g. Beach, Nature, Solo"
+            />
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              id="add-tag-btn"
+            >
+              Add Tag
+            </button>
           </div>
-          <div id="tags-container" class="d-flex flex-wrap gap-2">
-            </div>
+          <div id="tags-container" class="d-flex flex-wrap gap-2"></div>
         </div>
 
         <!-- Submit -->
-        <button class="btn btn-dark mt-4 mb-4 w-100" id="add-wishlist-button">Add Wishlist</button>
+        <button class="btn btn-dark mt-4 mb-4 w-100" id="add-wishlist-button">
+          Add Wishlist
+        </button>
       </form>
     </div>
 
