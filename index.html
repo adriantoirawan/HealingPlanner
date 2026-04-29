@@ -188,28 +188,27 @@
 
               <!-- Modal Pick for Me -->
               <div class="modal fade" id="picker" tabindex="-1">
-                <div
-                  class="modal-dialog modal-dialog-centered"
-                  style="width: 25rem"
-                >
+                <div class="modal-dialog modal-dialog-centered" style="width: 25rem">
                   <div class="modal-content p-4">
                     <img
-                      src="/HealingPlanner/img.jpg"
+                      src="https://via.placeholder.com/300x200?text=No+Image"
                       class="card-img-top w-100"
                       alt="Wishlist Image"
+                      id="random-activity-image"
+                      style="object-fit: cover; height: 200px;"
                     />
-                    <div class="card-body">
-                      <h4>Location</h4>
-                      <h5 class="card-title">Title</h5>
-                      <h6>Rp10000</h6>
-                      <p class="text-secondary">
-                        Some quick example text to build on the card title and
-                        make up the bulk of the card’s content.
+                    <div class="card-body px-0 pb-0">
+                      <h4 id="random-activity-location" class="text-danger fs-6 fw-bold mb-1"><i class="bi bi-geo-alt-fill"></i> Location</h4>
+                      <h5 class="card-title fw-bold fs-4" id="random-activity-title">Title</h5>
+                      <h6 class="text-success fw-bold" id="random-activity-budget">Rp0</h6>
+                      <p class="text-secondary mt-3" id="random-activity-desc">
+                        Activity description will appear here.
                       </p>
-                      <a href="#" class="btn btn-dark">View Detail</a>
-                      <button class="btn btn-secondary" data-bs-dismiss="modal">
-                        Cancel
-                      </button>
+                      <div class="d-flex gap-2 mt-4">
+                        <button class="btn btn-secondary w-100" data-bs-dismiss="modal">
+                          Cancel
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -262,5 +261,7 @@
     <script src="js/storageManager.js"></script>
     <!-- Integration Between Frontend and Backends -->
     <script src="js/app.js"></script>
+    <!-- Pick for Me JS -->
+    <script src="js/pickForMe.js"></script>
   </body>
 </html>
