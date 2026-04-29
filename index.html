@@ -75,26 +75,28 @@
             </article>
 
             <article class="card-group-item">
-              <header class="card-header">
+              <header class="card-header border-bottom-0 pb-0">
                 <h6 class="title">Budget</h6>
               </header>
               <div class="filter-content">
                 <div class="card-body">
                   <div class="row g-2">
                     <div class="col-6">
-                      <label>Min (Rp)</label>
+                      <label class="small text-secondary mb-1">Min (Rp)</label>
                       <input
                         type="number"
-                        class="form-control"
+                        class="form-control form-control-sm"
+                        id="filter-min-budget"
                         placeholder="0"
                       />
                     </div>
-                    <div class="col-6 text-end">
-                      <label>Max (Rp)</label>
+                    <div class="col-6">
+                      <label class="small text-secondary mb-1">Max (Rp)</label>
                       <input
                         type="number"
-                        class="form-control"
-                        placeholder="10,000,000"
+                        class="form-control form-control-sm"
+                        id="filter-max-budget"
+                        placeholder="10000000"
                       />
                     </div>
                   </div>
