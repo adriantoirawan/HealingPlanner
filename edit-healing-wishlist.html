@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - Healing Planner</title>
+
+    <!-- Bootstrap css -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary px-5">
+      <div class="container-fluid">
+        <a class="navbar-brand ps-5" href="index.html">Healing Planner</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about-us.html">About Us</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Content-->
+    <div class="container mt-4 px-5">
+      <h2>Edit Healing Wishlist</h2>
+      <p class="text-secondary pb-3">Fill in your dream healing activity!</p>
+      <form class="border rounded px-4">
+        <div class="mb-4 mt-3">
+          <label for="inputTitle" class="form-label">Title</label>
+          <input
+            type="title"
+            class="form-control"
+            id="title"
+            placeholder="Bali Getaway"
+          />
+        </div>
+        <div class="mb-4">
+          <label for="inputImage" class="form-label"
+            >Healing Activity Image</label
+          >
+          <input type="file" class="form-control" id="inputFile" />
+        </div>
+
+        <div class="mb-4">
+          <label for="inputLocation" class="form-label">Location</label>
+          <input
+            type="text"
+            class="form-control"
+            id="inputLocation"
+            placeholder="Bali"
+          />
+        </div>
+        <div class="mb-4">
+          <label for="inputBudget" class="form-label">Estimated Budget</label>
+          <input
+            type="number"
+            class="form-control"
+            id="inputBudget"
+            placeholder="Rp1500000"
+          />
+        </div>
+        <div class="mb-4">
+          <label for="inputDesc" class="form-label">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            id="inputDesc"
+            placeholder="Staycation di bali bersama si doi"
+          />
+        </div>
+
+        <div class="col mt-4 mb-4">
+          <i class="bi bi-tag"></i>
+          <button type="button" class="btn btn-dark btn-sm">
+            Outdoor <i class="bi bi-x"></i>
+          </button>
+          <button type="button" class="btn btn-dark btn-sm">
+            Dating <i class="bi bi-x"></i>
+          </button>
+        </div>
+      </form>
+      <button type="submit" class="btn btn-dark mt-4 w-100">
+        Save Wishlist
+      </button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light text-center py-4 mt-5">
+      <div class="container-fluid">
+        <p class="mb-1">
+          &copy; 2026 Healing Planner. All Rights Reserved. Team PALM
+        </p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap javascripts -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Backend Javascripts -->
+    <script src="js/storageManager.js"></script>
+    <script src="js/edit-activity.js"></script>
+  </body>
+</html>

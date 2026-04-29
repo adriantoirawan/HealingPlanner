@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - Healing Planner</title>
+  
+    <!-- Bootstrap css -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+    <!-- Bootstrap Modal  -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary px-5">
+      <div class="container-fluid">
+        <a class="navbar-brand ps-4" href="index.html">Healing Planner</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about-us.html">About Us</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Content-->
+    <div class="container mt-4 min-vh-100">
+      <div class="row">
+        <!-- Filter Sidebar -->
+        <div class="col-lg-3 mb-4">
+          <div class="card">
+            <article class="card-group-item">
+              <header class="card-header">
+                <h6 class="title">Filters</h6>
+              </header>
+            </article>
+
+            <article class="card-group-item">
+              <header class="card-header border-bottom-0 pb-0">
+                <h6 class="title">Tags</h6>
+              </header>
+              <div class="filter-content">
+                <div
+                  class="card-body d-flex flex-wrap gap-2"
+                  id="dynamic-filter-tags"
+                >
+                  <span class="text-secondary small">Loading tags...</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="card-group-item">
+              <header class="card-header border-bottom-0 pb-0">
+                <h6 class="title">Budget</h6>
+              </header>
+              <div class="filter-content">
+                <div class="card-body">
+                  <div class="row g-2">
+                    <div class="col-6">
+                      <label class="small text-secondary mb-1">Min (Rp)</label>
+                      <input
+                        type="number"
+                        class="form-control form-control-sm"
+                        id="filter-min-budget"
+                        placeholder="0"
+                      />
+                    </div>
+                    <div class="col-6">
+                      <label class="small text-secondary mb-1">Max (Rp)</label>
+                      <input
+                        type="number"
+                        class="form-control form-control-sm"
+                        id="filter-max-budget"
+                        placeholder="10000000"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- Search, Action Buttons And Contents-->
+        <div class="col-lg-9">
+          <!-- Search & Action Buttons -->
+          <div class="container-fluid px-0" id="search-bar">
+            <!-- Search -->
+            <form class="d-flex w-100 mb-4" id="search-form">
+              <div class="input-group">
+                <input
+                  class="form-control"
+                  type="search"
+                  placeholder="Search by title or location..."
+                  aria-label="Search"
+                  id="search-input"
+                />
+                <button class="btn btn-outline-success" type="submit">
+                  Search
+                </button>
+              </div>
+            </form>
+
+            <!-- Action Buttons -->
+            <div
+              class="d-flex justify-content-between align-items-center mb-4"
+              id="activity-buttons"
+            >
+              <div class="d-flex gap-2" id="budget-sort">
+                <button
+                  type="button"
+                  class="btn btn-light border"
+                  id="sort-asc-btn"
+                >
+                  Budget Ascending
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-light border"
+                  id="sort-desc-btn"
+                >
+                  Budget Descending
+                </button>
+              </div>
+
+              <div class="d-flex gap-2" id="action-buttons">
+                <button
+                  type="button"
+                  class="btn btn-dark rounded-circle"
+                  id="pick-for-me-btn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#picker"
+                >
+                  <i class="bi bi-magic"></i>
+                </button>
+                <a href="create-healing-wishlist.html" class="btn btn-dark">
+                  Add New Wishlist
+                </a>
+              </div>
+
+              <!-- Modal Pick for Me -->
+              <div class="modal fade" id="picker" tabindex="-1">
+                <div
+                  class="modal-dialog modal-dialog-centered"
+                  style="width: 25rem"
+                >
+                  <div class="modal-content p-4">
+                    <img
+                      src="https://via.placeholder.com/300x200?text=No+Image"
+                      class="card-img-top w-100"
+                      alt="Wishlist Image"
+                      id="random-activity-image"
+                      style="object-fit: cover; height: 200px"
+                    />
+                    <div class="card-body px-0 pb-0">
+                      <h4
+                        id="random-activity-location"
+                        class="text-danger fs-6 fw-bold mb-1"
+                      >
+                        <i class="bi bi-geo-alt-fill"></i> Location
+                      </h4>
+                      <h5
+                        class="card-title fw-bold fs-4"
+                        id="random-activity-title"
+                      >
+                        Title
+                      </h5>
+                      <h6
+                        class="text-success fw-bold"
+                        id="random-activity-budget"
+                      >
+                        Rp0
+                      </h6>
+                      <p class="text-secondary mt-3" id="random-activity-desc">
+                        Activity description will appear here.
+                      </p>
+                      <div class="d-flex gap-2 mt-4">
+                        <button
+                          class="btn btn-secondary w-100"
+                          data-bs-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contents -->
+          <div
+            id="activities-container"
+            class="d-flex flex-column gap-3 mb-5 pb-5"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="globalDeleteModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header border-0 pb-0">
+            <h5 class="modal-title text-danger fw-bold">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>Confirm
+              Deletion
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to delete this healing wishlist? This action
+            cannot be undone.
+          </div>
+          <div class="modal-footer border-0 pt-0">
+            <button class="btn btn-light" data-bs-dismiss="modal">
+              Cancel
+            </button>
+            <button class="btn btn-danger px-4" id="execute-delete-btn">
+              Yes, Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Footer -->
+    <footer class="bg-dark text-light text-center py-4">
+      <div class="container-fluid">
+        <p class="mb-1">
+          &copy; 2026 Healing Planner. All Rights Reserved. Team PALM
+        </p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap javascripts -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Backend Javascripts -->
+    <script src="js/storageManager.js"></script>
+    <!-- Integration Between Frontend and Backends -->
+    <script src="js/app.js"></script>
+    <!-- Pick for Me JS -->
+    <script src="js/pickForMe.js"></script>
+  </body>
+</html>
