@@ -1,4 +1,4 @@
-// --- 1. SAVE FUNCTION ---
+// --- SAVE FUNCTION ---
 function executeSave(title, imageBase64, location, budget, description, tags) {
   const activityData = {
     title: title,
@@ -20,7 +20,7 @@ function executeSave(title, imageBase64, location, budget, description, tags) {
   }
 }
 
-// --- 2. DYNAMIC TAGS INPUT LOGIC (Create Page) ---
+// --- DYNAMIC TAGS INPUT LOGIC (Create Page) ---
 let currentFormTags = [];
 const tagInput = document.getElementById("tag-input");
 const addTagBtn = document.getElementById("add-tag-btn");
@@ -64,7 +64,7 @@ if (tagInput && addTagBtn) {
   });
 }
 
-// --- 3. ADD BUTTON EVENT LISTENER ---
+// --- ADD BUTTON EVENT LISTENER ---
 const addNewWishlistButton = document.getElementById("add-wishlist-button");
 
 if (addNewWishlistButton) {
@@ -118,7 +118,7 @@ if (addNewWishlistButton) {
   });
 }
 
-// --- 4. "PICK FOR ME" FEATURE LOGIC ---
+// --- "PICK FOR ME" FEATURE LOGIC ---
 const pickForMeBtn = document.getElementById("pick-for-me-btn");
 
 if (pickForMeBtn) {
@@ -151,7 +151,7 @@ function showRandomResult() {
   modalImg.src = randomActivity.image;
 }
 
-// --- 5. GLOBAL STATE VARIABLES ---
+// --- GLOBAL STATE VARIABLES ---
 let activityIdToDelete = null;
 let currentSearchTerm = "";
 let currentSortOrder = "";
@@ -159,7 +159,7 @@ let currentFilterTags = [];
 let currentMinBudget = null;
 let currentMaxBudget = null;
 
-// --- 6. DYNAMIC SIDEBAR FILTER GENERATOR (Index Page) ---
+// --- DYNAMIC SIDEBAR FILTER GENERATOR (Index Page) ---
 function renderFilterSidebar() {
   const container = document.getElementById("dynamic-filter-tags");
   if (!container) return;
@@ -204,7 +204,7 @@ function renderFilterSidebar() {
   });
 }
 
-// --- 7. UI RENDERING FUNCTIONS ---
+// --- UI RENDERING FUNCTIONS ---
 function renderCards() {
   const container = document.getElementById("activities-container");
   if (!container) return;
@@ -301,7 +301,7 @@ function renderCards() {
   }
 }
 
-// --- 8. OTHER EVENT LISTENERS ---
+// --- OTHER EVENT LISTENERS ---
 
 // Search
 const searchForm = document.getElementById("search-form");
@@ -354,7 +354,7 @@ if (maxBudgetInput) {
   });
 }
 
-// --- 9. ACTION LOGIC ---
+// --- ACTION LOGIC ---
 function editItem(id) {
   window.location.href = `edit-healing-wishlist.html?id=${id}`;
 }
