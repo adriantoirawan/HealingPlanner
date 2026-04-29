@@ -130,23 +130,38 @@ function showRandomResult() {
 let activityIdToDelete = null;
 
 // UI RENDERING FUNCTIONS
-function renderCards() {
+function renderCards(searchTerm = "") {
   const container = document.getElementById("activities-container");
   if (!container) return;
 
-  const activities = getActivities();
+  // 1. Get all activities
+  let activities = getActivities();
+
+  // 2. Filter activities if a search term exists
+  if (searchTerm.trim() !== "") {
+    const lowerCaseTerm = searchTerm.toLowerCase();
+    activities = activities.filter(item => {
+      // Check if the title or the location includes the search term
+      const matchTitle = item.title.toLowerCase().includes(lowerCaseTerm);
+      const matchLocation = item.location.toLowerCase().includes(lowerCaseTerm);
+      return matchTitle || matchLocation;
+    });
+  }
+
   container.innerHTML = "";
 
+  // 3. Handle Empty State
   if (activities.length === 0) {
     container.innerHTML = `
       <div class="col-12 d-flex flex-column justify-content-center align-items-center text-center w-100" style="height: 40vh;">
           <i class="bi bi-journal-x text-secondary" style="font-size: 3rem;"></i>
-          <span class="text-secondary fs-5 mt-2">No activities found. Add your first healing activity!</span>
+          <span class="text-secondary fs-5 mt-2">No activities found.</span>
       </div>
     `;
     return;
   }
 
+  // 4. Render Cards
   for (let i = 0; i < activities.length; i++) {
     const item = activities[i];
     const formattedBudget = item.budget.toLocaleString("id-ID");
@@ -179,6 +194,23 @@ function renderCards() {
     `;
     container.innerHTML += cardHTML;
   }
+}
+
+// --- SEARCH FEATURE LOGIC ---
+const searchForm = document.getElementById("search-form");
+const searchInput = document.getElementById("search-input");
+
+if (searchForm && searchInput) {
+  // Option 1: Search when the user clicks the "Search" button or hits Enter
+  searchForm.addEventListener("submit", function(e) {
+    e.preventDefault(); // Prevent the page from reloading
+    renderCards(searchInput.value);
+  });
+
+  // Option 2: Live search (filters instantly as the user types)
+  searchInput.addEventListener("input", function(e) {
+    renderCards(e.target.value);
+  });
 }
 
 // --- ACTION LOGIC ---
