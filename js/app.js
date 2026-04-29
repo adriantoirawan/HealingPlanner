@@ -83,99 +83,48 @@ if (addNewWishlistButton) {
   });
 }
 
-// // UI RENDERING FUNCTIONS
-// function renderCards() {
-//   const container = document.getElementById("activities-container");
+// --- "PICK FOR ME" FEATURE LOGIC ---
 
-//   // If we are not on the index page, stop the function
-//   if (!container) return;
+// Ensure the function is only attached if the button exists on the current page
+const pickForMeBtn = document.getElementById("pick-for-me-btn");
 
-//   const activities = getActivities();
+if (pickForMeBtn) {
+  pickForMeBtn.addEventListener("click", showRandomResult);
+}
 
-//   container.innerHTML = "";
+function showRandomResult() {
+  // 1. Get all activities from local storage
+  const allActivities = getActivities();
 
-//   if (activities.length === 0) {
-//     container.innerHTML = `
-//             <div class="col-12 d-flex justify-content-center align-items-center text-center w-100" style="height: 40vh;">
-//                 <span class="text-secondary fs-5">Add your first healing activity!</span>
-//             </div>
-//         `;
-//     return;
-//   }
+  // 2. Pass the array to our randomizer function
+  const randomActivity = getRandomActivity(allActivities);
 
-//   // Loop through the array and build a horizontal card for each item
-//   for (let i = 0; i < activities.length; i++) {
-//     const item = activities[i];
+  // 3. Grab the DOM elements inside the modal
+  const modalTitle = document.getElementById("random-activity-title");
+  const modalLocation = document.getElementById("random-activity-location");
+  const modalBudget = document.getElementById("random-activity-budget");
+  const modalDesc = document.getElementById("random-activity-desc");
+  const modalImg = document.getElementById("random-activity-image");
 
-//     const formattedBudget = item.budget.toLocaleString("id-ID");
-//     const imageSrc = item.image
-//       ? item.image
-//       : "https://via.placeholder.com/300x300?text=No+Image";
+  if (!randomActivity) {
+    // If there are no activities saved yet, show a fallback state
+    modalTitle.textContent = "No Activities Found";
+    modalLocation.innerHTML = `<i class="bi bi-geo-alt-fill"></i> Unknown`;
+    modalBudget.textContent = "Rp0";
+    modalDesc.textContent = "You need to add some activities to your wishlist before we can pick one for you!";
+    modalImg.src = "https://via.placeholder.com/300x200?text=Add+Activities";
+    return;
+  }
 
-//     // The updated HTML template for the horizontal List View
-//     const cardHTML = `
-//             <div class="card shadow-sm w-100">
-//                 <div class="row g-0">
-//                     <div class="col-md-4 col-lg-3">
-//                         <img src="${imageSrc}" class="img-fluid rounded-start h-100 w-100" style="object-fit: cover; min-height: 200px;" alt="${item.title}">
-//                     </div>
-                    
-//                     <div class="col-md-8 col-lg-9">
-//                         <div class="card-body d-flex flex-column h-100 py-4">
-//                             <h4 class="card-title fw-bold mb-1">${item.title}</h4>
-                            
-//                             <p class="text-muted small mb-3">
-//                                 <i class="bi bi-geo-alt-fill text-danger"></i> ${item.location} &nbsp;|&nbsp; <span class="fw-bold text-success">Rp ${formattedBudget}</span>
-//                             </p>
-                            
-//                             <p class="card-text text-secondary mb-4 flex-grow-1">
-//                                 ${item.description}
-//                             </p>
-                            
-//                             <div class="d-flex gap-2 mt-auto">
-//                                 <button class="btn btn-sm btn-light border text-secondary fw-semibold">View Detail</button>
-//                                 <button class="btn btn-sm btn-dark px-3" onclick="editItem('${item.id}')">Edit</button>
-//                                 <button  data-bs-toggle="modal"
-//                     data-bs-target="#deleteModal" class="btn btn-sm btn-danger px-3" onclick="deleteItem('${item.id}')">Delete</button>
-//                             </div>
-//                             <!-- Modal Delete-->
-//           <div class="modal fade" id="deleteModal" tabindex="-1">
-//             <div class="modal-dialog modal-dialog-centered">
-//               <div class="modal-content">
-//                 <div class="modal-header">
-//                   <h5 class="modal-title">Confirm Delete</h5>
-//                   <button
-//                     type="button"
-//                     class="btn-close"
-//                     data-bs-dismiss="modal"
-//                   ></button>
-//                 </div>
-
-//                 <div class="modal-body">
-//                   You’re going to delete the wishlist permanently. Are you sure?
-//                 </div>
-
-//                 <div class="modal-footer">
-//                   <button class="btn btn-secondary" data-bs-dismiss="modal">
-//                     Cancel
-//                   </button>
-//                   <button class="btn btn-danger">Delete</button>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//                         </div>
-//                     </div>
-//                 </div>
-//             </div>
-//         `;
-
-//     container.innerHTML += cardHTML;
-//   }
-// }
-
-// // Automatically run renderCards when the script loads
-// renderCards();
+  // 4. Populate the modal with the random activity's data
+  modalTitle.textContent = randomActivity.title;
+  modalLocation.innerHTML = `<i class="bi bi-geo-alt-fill"></i> ${randomActivity.location}`;
+  modalBudget.textContent = `Rp ${randomActivity.budget.toLocaleString("id-ID")}`;
+  modalDesc.textContent = randomActivity.description;
+  
+  // Use the uploaded image, or a placeholder if none exists
+  modalImg.src = randomActivity.image ? randomActivity.image : "https://via.placeholder.com/300x200?text=No+Image";
+}
 
 // --- STATE VARIABLE FOR DELETION ---
 let activityIdToDelete = null;
@@ -269,7 +218,3 @@ if (executeDeleteBtn) {
 
 // Automatically run renderCards when the script loads
 renderCards();
-
-function showRandomResult() {
-  // Logic to display a random activity
-}
