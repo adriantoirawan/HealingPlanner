@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home - Healing Planner</title>
-
+  
     <!-- Bootstrap css -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
@@ -22,9 +22,9 @@
   </head>
   <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary px-5">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Healing Planner</a>
+        <a class="navbar-brand ps-4" href="index.html">Healing Planner</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -44,7 +44,7 @@
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">About Us</a>
+              <a class="nav-link" href="about-us.html">About Us</a>
             </li>
           </ul>
         </div>
@@ -52,10 +52,10 @@
     </nav>
 
     <!-- Content-->
-    <div class="container-fluid mt-4 min-vh-100">
+    <div class="container mt-4 min-vh-100">
       <div class="row">
         <!-- Filter Sidebar -->
-        <div class="col-md-3 col-lg-2 mb-4">
+        <div class="col-lg-3 mb-4">
           <div class="card">
             <article class="card-group-item">
               <header class="card-header">
@@ -68,7 +68,10 @@
                 <h6 class="title">Tags</h6>
               </header>
               <div class="filter-content">
-                <div class="card-body d-flex flex-wrap gap-2" id="dynamic-filter-tags">
+                <div
+                  class="card-body d-flex flex-wrap gap-2"
+                  id="dynamic-filter-tags"
+                >
                   <span class="text-secondary small">Loading tags...</span>
                 </div>
               </div>
@@ -107,7 +110,7 @@
         </div>
 
         <!-- Search, Action Buttons And Contents-->
-        <div class="col-md-9 col-lg-10">
+        <div class="col-lg-9">
           <!-- Search & Action Buttons -->
           <div class="container-fluid px-0" id="search-bar">
             <!-- Search -->
@@ -132,10 +135,18 @@
               id="activity-buttons"
             >
               <div class="d-flex gap-2" id="budget-sort">
-                <button type="button" class="btn btn-light border" id="sort-asc-btn">
+                <button
+                  type="button"
+                  class="btn btn-light border"
+                  id="sort-asc-btn"
+                >
                   Budget Ascending
                 </button>
-                <button type="button" class="btn btn-light border" id="sort-desc-btn">
+                <button
+                  type="button"
+                  class="btn btn-light border"
+                  id="sort-desc-btn"
+                >
                   Budget Descending
                 </button>
               </div>
@@ -157,24 +168,45 @@
 
               <!-- Modal Pick for Me -->
               <div class="modal fade" id="picker" tabindex="-1">
-                <div class="modal-dialog modal-dialog-centered" style="width: 25rem">
+                <div
+                  class="modal-dialog modal-dialog-centered"
+                  style="width: 25rem"
+                >
                   <div class="modal-content p-4">
                     <img
                       src="https://via.placeholder.com/300x200?text=No+Image"
                       class="card-img-top w-100"
                       alt="Wishlist Image"
                       id="random-activity-image"
-                      style="object-fit: cover; height: 200px;"
+                      style="object-fit: cover; height: 200px"
                     />
                     <div class="card-body px-0 pb-0">
-                      <h4 id="random-activity-location" class="text-danger fs-6 fw-bold mb-1"><i class="bi bi-geo-alt-fill"></i> Location</h4>
-                      <h5 class="card-title fw-bold fs-4" id="random-activity-title">Title</h5>
-                      <h6 class="text-success fw-bold" id="random-activity-budget">Rp0</h6>
+                      <h4
+                        id="random-activity-location"
+                        class="text-danger fs-6 fw-bold mb-1"
+                      >
+                        <i class="bi bi-geo-alt-fill"></i> Location
+                      </h4>
+                      <h5
+                        class="card-title fw-bold fs-4"
+                        id="random-activity-title"
+                      >
+                        Title
+                      </h5>
+                      <h6
+                        class="text-success fw-bold"
+                        id="random-activity-budget"
+                      >
+                        Rp0
+                      </h6>
                       <p class="text-secondary mt-3" id="random-activity-desc">
                         Activity description will appear here.
                       </p>
                       <div class="d-flex gap-2 mt-4">
-                        <button class="btn btn-secondary w-100" data-bs-dismiss="modal">
+                        <button
+                          class="btn btn-secondary w-100"
+                          data-bs-dismiss="modal"
+                        >
                           Cancel
                         </button>
                       </div>
@@ -198,19 +230,31 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header border-0 pb-0">
-            <h5 class="modal-title text-danger fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i>Confirm Deletion</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <h5 class="modal-title text-danger fw-bold">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>Confirm
+              Deletion
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
           </div>
           <div class="modal-body">
-            Are you sure you want to delete this healing wishlist? This action cannot be undone.
+            Are you sure you want to delete this healing wishlist? This action
+            cannot be undone.
           </div>
           <div class="modal-footer border-0 pt-0">
-            <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-            <button class="btn btn-danger px-4" id="execute-delete-btn">Yes, Delete</button>
+            <button class="btn btn-light" data-bs-dismiss="modal">
+              Cancel
+            </button>
+            <button class="btn btn-danger px-4" id="execute-delete-btn">
+              Yes, Delete
+            </button>
           </div>
         </div>
       </div>
-  </div>
+    </div>
     <!-- Footer -->
     <footer class="bg-dark text-light text-center py-4">
       <div class="container-fluid">
