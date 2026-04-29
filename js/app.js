@@ -1,12 +1,12 @@
-// SAVE FUNCTION
-function executeSave(title, imageBase64, location, budget, description) {
+// --- 1. SAVE FUNCTION ---
+function executeSave(title, imageBase64, location, budget, description, tags) {
   const activityData = {
     title: title,
     image: imageBase64,
     location: location,
     budget: Number(budget),
     description: description,
-    tags: [],
+    tags: tags || [], 
   };
 
   const result = saveActivity(activityData);
@@ -20,11 +20,53 @@ function executeSave(title, imageBase64, location, budget, description) {
   }
 }
 
-// ADD BUTTON EVENT LISTENER
+// --- 2. DYNAMIC TAGS INPUT LOGIC (Create Page) ---
+let currentFormTags = [];
+const tagInput = document.getElementById("tag-input");
+const addTagBtn = document.getElementById("add-tag-btn");
+const tagsContainer = document.getElementById("tags-container");
+
+function renderFormTags() {
+  if (!tagsContainer) return;
+  tagsContainer.innerHTML = "";
+  currentFormTags.forEach((tag, index) => {
+    tagsContainer.innerHTML += `
+      <span class="badge bg-dark d-flex align-items-center fs-6 fw-normal">
+          ${tag} <i class="bi bi-x ms-2" style="cursor:pointer;" onclick="removeFormTag(${index})"></i>
+      </span>
+    `;
+  });
+}
+
+// Attach to window so the inline onclick works
+window.removeFormTag = function(index) {
+  currentFormTags.splice(index, 1);
+  renderFormTags();
+};
+
+if (tagInput && addTagBtn) {
+  // Add tag on button click
+  addTagBtn.addEventListener("click", () => {
+    const val = tagInput.value.trim();
+    if (val && !currentFormTags.includes(val)) {
+      currentFormTags.push(val);
+      tagInput.value = "";
+      renderFormTags();
+    }
+  });
+
+  // Add tag on pressing "Enter" (and prevent form submission)
+  tagInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); 
+      addTagBtn.click();
+    }
+  });
+}
+
+// --- 3. ADD BUTTON EVENT LISTENER ---
 const addNewWishlistButton = document.getElementById("add-wishlist-button");
 
-// We check IF the button exists before adding the listener
-// This prevents errors on index.html where this button doesn't exist
 if (addNewWishlistButton) {
   addNewWishlistButton.addEventListener("click", function (e) {
     e.preventDefault();
@@ -48,16 +90,14 @@ if (addNewWishlistButton) {
       document.getElementById("healing-budget").value = "";
       document.getElementById("healing-description").value = "";
       imageInput.value = "";
+      // Clear dynamic tags
+      currentFormTags = [];
+      renderFormTags();
     }
 
     if (!imageFile) {
-      const isSuccess = executeSave(
-        titleVal,
-        "",
-        locationVal,
-        budgetVal,
-        descriptionVal,
-      );
+      // Pass the dynamic currentFormTags array
+      const isSuccess = executeSave(titleVal, "", locationVal, budgetVal, descriptionVal, currentFormTags);
       if (isSuccess) clearForm();
       return;
     }
@@ -70,22 +110,15 @@ if (addNewWishlistButton) {
     const reader = new FileReader();
     reader.onload = function (event) {
       const base64String = event.target.result;
-      const isSuccess = executeSave(
-        titleVal,
-        base64String,
-        locationVal,
-        budgetVal,
-        descriptionVal,
-      );
+      // Pass the dynamic currentFormTags array
+      const isSuccess = executeSave(titleVal, base64String, locationVal, budgetVal, descriptionVal, currentFormTags);
       if (isSuccess) clearForm();
     };
     reader.readAsDataURL(imageFile);
   });
 }
 
-// --- "PICK FOR ME" FEATURE LOGIC ---
-
-// Ensure the function is only attached if the button exists on the current page
+// --- 4. "PICK FOR ME" FEATURE LOGIC ---
 const pickForMeBtn = document.getElementById("pick-for-me-btn");
 
 if (pickForMeBtn) {
@@ -93,13 +126,9 @@ if (pickForMeBtn) {
 }
 
 function showRandomResult() {
-  // Get all activities from local storage
   const allActivities = getActivities();
-
-  // Pass the array to our randomizer function
   const randomActivity = getRandomActivity(allActivities);
 
-  // Grab the DOM elements inside the modal
   const modalTitle = document.getElementById("random-activity-title");
   const modalLocation = document.getElementById("random-activity-location");
   const modalBudget = document.getElementById("random-activity-budget");
@@ -107,7 +136,6 @@ function showRandomResult() {
   const modalImg = document.getElementById("random-activity-image");
 
   if (!randomActivity) {
-    // If there are no activities saved yet, show a fallback state
     modalTitle.textContent = "No Activities Found";
     modalLocation.innerHTML = `<i class="bi bi-geo-alt-fill"></i> Unknown`;
     modalBudget.textContent = "Rp0";
@@ -116,30 +144,74 @@ function showRandomResult() {
     return;
   }
 
-  // Populate the modal with the random activity's data
   modalTitle.textContent = randomActivity.title;
   modalLocation.innerHTML = `<i class="bi bi-geo-alt-fill"></i> ${randomActivity.location}`;
   modalBudget.textContent = `Rp ${randomActivity.budget.toLocaleString("id-ID")}`;
   modalDesc.textContent = randomActivity.description;
-  
-  // Use the uploaded image, or a placeholder if none exists
   modalImg.src = randomActivity.image;
 }
 
-// --- STATE VARIABLES ---
+// --- 5. GLOBAL STATE VARIABLES ---
 let activityIdToDelete = null;
 let currentSearchTerm = "";
-let currentSortOrder = ""; // Can be "asc", "desc", or ""
+let currentSortOrder = ""; 
+let currentFilterTags = [];
+let currentMinBudget = null;
+let currentMaxBudget = null;
 
-// UI RENDERING FUNCTIONS
+// --- 6. DYNAMIC SIDEBAR FILTER GENERATOR (Index Page) ---
+function renderFilterSidebar() {
+  const container = document.getElementById("dynamic-filter-tags");
+  if (!container) return;
+
+  const activities = getActivities();
+  const uniqueTags = new Set(); 
+
+  activities.forEach(item => {
+    if (item.tags && Array.isArray(item.tags)) {
+      item.tags.forEach(tag => uniqueTags.add(tag));
+    }
+  });
+
+  container.innerHTML = "";
+  
+  if (uniqueTags.size === 0) {
+    container.innerHTML = '<span class="text-secondary small">No tags available</span>';
+    return;
+  }
+
+  // Generate Bootstrap btn-check pills instead of standard checkboxes
+  uniqueTags.forEach(tag => {
+    const isChecked = currentFilterTags.includes(tag) ? "checked" : "";
+    container.innerHTML += `
+      <div>
+        <input type="checkbox" class="btn-check filter-tag-checkbox" id="filter-${tag}" value="${tag}" autocomplete="off" ${isChecked}>
+        <label class="btn btn-outline-dark btn-sm rounded-pill" for="filter-${tag}">${tag}</label>
+      </div>
+    `;
+  });
+
+  // Re-attach listeners to the new toggle pills
+  document.querySelectorAll(".filter-tag-checkbox").forEach(cb => {
+    cb.addEventListener("change", function() {
+      if (this.checked) {
+        currentFilterTags.push(this.value);
+      } else {
+        currentFilterTags = currentFilterTags.filter(t => t !== this.value);
+      }
+      renderCards(); 
+    });
+  });
+}
+
+// --- 7. UI RENDERING FUNCTIONS ---
 function renderCards() {
   const container = document.getElementById("activities-container");
   if (!container) return;
 
-  // Get all activities
   let activities = getActivities();
 
-  // Filter activities based on global search state
+  // Search Filter
   if (currentSearchTerm.trim() !== "") {
     const lowerCaseTerm = currentSearchTerm.toLowerCase();
     activities = activities.filter(item => {
@@ -149,7 +221,24 @@ function renderCards() {
     });
   }
 
-  // Sort activities based on global sort state
+  // Tags Filter
+  if (currentFilterTags.length > 0) {
+    activities = activities.filter(item => {
+      if (!item.tags || item.tags.length === 0) return false;
+      
+      return currentFilterTags.some(tag => item.tags.includes(tag));
+    });
+  }
+
+  // Budget Filter
+  if (currentMinBudget !== null) {
+    activities = activities.filter(item => item.budget >= currentMinBudget);
+  }
+  if (currentMaxBudget !== null) {
+    activities = activities.filter(item => item.budget <= currentMaxBudget);
+  }
+
+  // Sorting
   if (currentSortOrder === "asc") {
     activities.sort((a, b) => a.budget - b.budget);
   } else if (currentSortOrder === "desc") {
@@ -158,22 +247,27 @@ function renderCards() {
 
   container.innerHTML = "";
 
-  // Handle Empty State
   if (activities.length === 0) {
     container.innerHTML = `
       <div class="col-12 d-flex flex-column justify-content-center align-items-center text-center w-100" style="height: 40vh;">
           <i class="bi bi-journal-x text-secondary" style="font-size: 3rem;"></i>
-          <span class="text-secondary fs-5 mt-2">No activities found.</span>
+          <span class="text-secondary fs-5 mt-2">No activities match your filters.</span>
       </div>
     `;
     return;
   }
 
-  // Render Cards
   for (let i = 0; i < activities.length; i++) {
     const item = activities[i];
     const formattedBudget = item.budget.toLocaleString("id-ID");
-    const imageSrc = item.image;
+    const imageSrc = item.image ? item.image : "https://via.placeholder.com/300x300?text=No+Image";
+
+    let tagsHTML = "";
+    if (item.tags && item.tags.length > 0) {
+      item.tags.forEach(tag => {
+        tagsHTML += `<span class="badge bg-secondary me-1 fw-normal">${tag}</span>`;
+      });
+    }
 
     const cardHTML = `
       <div class="card shadow-sm w-100">
@@ -184,7 +278,10 @@ function renderCards() {
               
               <div class="col-md-8 col-lg-9">
                   <div class="card-body d-flex flex-column h-100 py-4">
-                      <h4 class="card-title fw-bold mb-1">${item.title}</h4>
+                      <div class="d-flex justify-content-between align-items-start">
+                         <h4 class="card-title fw-bold mb-1">${item.title}</h4>
+                         <div>${tagsHTML}</div>
+                      </div>
                       <p class="text-muted small mb-3">
                           <i class="bi bi-geo-alt-fill text-danger"></i> ${item.location} &nbsp;|&nbsp; <span class="fw-bold text-success">Rp ${formattedBudget}</span>
                       </p>
@@ -204,19 +301,17 @@ function renderCards() {
   }
 }
 
-// --- SEARCH & SORT EVENT LISTENERS ---
+// --- 8. OTHER EVENT LISTENERS ---
 
 // Search
 const searchForm = document.getElementById("search-form");
 const searchInput = document.getElementById("search-input");
-
 if (searchForm && searchInput) {
   searchForm.addEventListener("submit", function(e) {
     e.preventDefault(); 
     currentSearchTerm = searchInput.value;
     renderCards();
   });
-
   searchInput.addEventListener("input", function(e) {
     currentSearchTerm = e.target.value;
     renderCards();
@@ -226,7 +321,6 @@ if (searchForm && searchInput) {
 // Sort
 const sortAscBtn = document.getElementById("sort-asc-btn");
 const sortDescBtn = document.getElementById("sort-desc-btn");
-
 if (sortAscBtn && sortDescBtn) {
   sortAscBtn.addEventListener("click", function() {
     currentSortOrder = "asc";
@@ -234,7 +328,6 @@ if (sortAscBtn && sortDescBtn) {
     sortDescBtn.className = "btn btn-light border";
     renderCards();
   });
-
   sortDescBtn.addEventListener("click", function() {
     currentSortOrder = "desc";
     sortDescBtn.className = "btn btn-dark";
@@ -243,38 +336,50 @@ if (sortAscBtn && sortDescBtn) {
   });
 }
 
-// --- ACTION LOGIC ---
+// Budget Filters 
+const minBudgetInput = document.getElementById("filter-min-budget");
+const maxBudgetInput = document.getElementById("filter-max-budget");
 
-// EDIT: Redirect to the edit page with the ID in the URL
+if (minBudgetInput) {
+  minBudgetInput.addEventListener("input", function() {
+    currentMinBudget = this.value === "" ? null : Number(this.value);
+    renderCards();
+  });
+}
+
+if (maxBudgetInput) {
+  maxBudgetInput.addEventListener("input", function() {
+    currentMaxBudget = this.value === "" ? null : Number(this.value);
+    renderCards();
+  });
+}
+
+// --- 9. ACTION LOGIC ---
 function editItem(id) {
   window.location.href = `edit-healing-wishlist.html?id=${id}`;
 }
 
-// VIEW: Redirect to the view page with the ID in the URL
 function viewItem(id) {
   window.location.href = `view-healing-wishlist.html?id=${id}`;
 }
 
-// DELETE: Open Bootstrap Modal and store the ID
 function triggerDeleteModal(id) {
-  activityIdToDelete = id; // Save the ID to our global variable
+  activityIdToDelete = id; 
   const deleteModal = new bootstrap.Modal(document.getElementById('globalDeleteModal'));
   deleteModal.show();
 }
 
-// Listen for the final confirmation inside the modal
 const executeDeleteBtn = document.getElementById("execute-delete-btn");
 if (executeDeleteBtn) {
   executeDeleteBtn.addEventListener("click", function() {
     if (activityIdToDelete) {
       const response = deleteActivity(activityIdToDelete);
-      
       if (response.success) {
-        // Hide the modal properly using Bootstrap's API
         const modalInstance = bootstrap.Modal.getInstance(document.getElementById('globalDeleteModal'));
         modalInstance.hide();
         
-        // Refresh the list visually
+        // Refresh the list and sidebar!
+        renderFilterSidebar(); 
         renderCards(); 
       } else {
         alert("Failed to delete: " + response.message);
@@ -283,5 +388,6 @@ if (executeDeleteBtn) {
   });
 }
 
-// Automatically run renderCards when the script loads
+// Boot the app
+renderFilterSidebar();
 renderCards();

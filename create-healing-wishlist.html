@@ -104,11 +104,14 @@
         </div>
 
         <!-- Tags -->
-        <div class="col mt-4 mb-4">
-          <i class="bi bi-tag"></i>
-          <button type="button" class="btn btn-dark btn-sm">
-            Add Tag <i class="bi bi-x"></i>
-          </button>
+        <div class="mb-4">
+          <label class="form-label d-block"><i class="bi bi-tag"></i> Tags</label>
+          <div class="input-group mb-2">
+            <input type="text" class="form-control" id="tag-input" placeholder="e.g. Beach, Nature, Solo" />
+            <button class="btn btn-outline-secondary" type="button" id="add-tag-btn">Add Tag</button>
+          </div>
+          <div id="tags-container" class="d-flex flex-wrap gap-2">
+            </div>
         </div>
 
         <!-- Submit -->
