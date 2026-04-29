@@ -191,7 +191,7 @@ function renderCards() {
                       <p class="card-text text-secondary mb-4 flex-grow-1">${item.description}</p>
                       
                       <div class="d-flex gap-2 mt-auto">
-                          <button class="btn btn-sm btn-light border text-secondary fw-semibold">View Detail</button>
+                          <button class="btn btn-sm btn-light border text-secondary fw-semibold" onclick="viewItem('${item.id}')">View Detail</button>
                           <button class="btn btn-sm btn-dark px-3" onclick="editItem('${item.id}')">Edit</button>
                           <button class="btn btn-sm btn-danger px-3" onclick="triggerDeleteModal('${item.id}')">Delete</button>
                       </div>
@@ -248,6 +248,11 @@ if (sortAscBtn && sortDescBtn) {
 // EDIT: Redirect to the edit page with the ID in the URL
 function editItem(id) {
   window.location.href = `edit-healing-wishlist.html?id=${id}`;
+}
+
+// VIEW: Redirect to the view page with the ID in the URL
+function viewItem(id) {
+  window.location.href = `view-healing-wishlist.html?id=${id}`;
 }
 
 // DELETE: Open Bootstrap Modal and store the ID
