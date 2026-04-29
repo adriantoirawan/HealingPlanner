@@ -212,5 +212,94 @@ function deleteActivity(id) {
   }
 }
 
+// --- DEMO DATA INITIALIZATION ---
+function initializeDemoData() {
+  const existingData = localStorage.getItem(storageKey);
+  
+  // Check if there is already data in local storage. 
+  // If there is, we don't want to overwrite the user's actual saved items!
+  if (existingData) {
+    const parsedData = JSON.parse(existingData);
+    if (parsedData.length > 0) {
+      console.log("Storage already has data. Skipping demo data initialization.");
+      return;
+    }
+  }
+
+  // Generate a diverse set of demo activities
+  const demoActivities = [
+    {
+      id: "demo_1" + Date.now(),
+      title: "Weekend Retreat in Lembang",
+      image: "img/lembang.jpg", // Nature/Cabin vibe
+      location: "Bandung",
+      budget: 1200000,
+      description: "Taking a road trip to the mountains for a quiet weekend in a pine forest cabin to reset and enjoy the cool air.",
+      tags: ["Nature", "Roadtrip", "Outdoor"]
+    },
+    {
+      id: "demo_2" + Date.now(),
+      title: "Culinary Train Trip to Kota Lama",
+      image: "img/traintrip.jpg", // Train/City vibe
+      location: "Semarang",
+      budget: 850000,
+      description: "Taking the morning train to explore the historical buildings in Kota Lama and hunting for the best local street food.",
+      tags: ["Solo", "Outdoor", "Cheap"]
+    },
+    {
+      id: "demo_3" + Date.now(),
+      title: "Luxury Staycation",
+      image: "img/luxurystaycation.jpg", // Fancy hotel bed
+      location: "Jakarta",
+      budget: 3500000,
+      description: "Booking a high-end hotel room in the city center just to order room service, use the spa, and sleep in.",
+      tags: ["Indoor", "Dating"]
+    },
+    {
+      id: "demo_4" + Date.now(),
+      title: "Quick Coffee Shop Hopping",
+      image: "img/coffee.jpg", // Cafe vibe
+      location: "Depok",
+      budget: 150000,
+      description: "Spending the afternoon reading a book and trying out two new local artisan coffee shops.",
+      tags: ["Indoor", "Cheap", "Solo"]
+    },
+    {
+      id: "demo_5" + Date.now(),
+      title: "Beachfront Resort Getaway",
+      image: "img/beachresort.jpg", // Beautiful beach
+      location: "Bali",
+      budget: 4500000,
+      description: "A proper long-weekend vacation staying right on the beach, with surfing lessons in the morning and seafood dinners at night.",
+      tags: ["Outdoor", "Beach", "Dating"]
+    },
+    {
+      id: "demo_6" + Date.now(),
+      title: "Business Trip Extension",
+      image: "img/businessextension.jpg", // Restaurant/City
+      location: "Surabaya",
+      budget: 600000,
+      description: "Extending a work trip through the weekend to finally explore the local culinary scene without rushing.",
+      tags: ["Solo", "Indoor"]
+    }
+  ];
+
+  // Save to local storage
+  localStorage.setItem(storageKey, JSON.stringify(demoActivities));
+  console.log("Successfully injected demo data!");
+}
+
+// --- CLEAR STORAGE LOGIC ---
+function clearLocalStorage() {
+  // Remove the specific key used by this app
+  localStorage.removeItem(storageKey);
+  
+  // Immediately re-initialize an empty array so the app doesn't crash 
+  // when it tries to read the data on the next page load
+  initializeStorage();
+  
+  console.log("Local storage has been completely cleared!");
+}
+
 // Run initialization immediately when the file loads
 initializeStorage();
