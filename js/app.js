@@ -6,7 +6,7 @@ function executeSave(title, imageBase64, location, budget, description, tags) {
     location: location,
     budget: Number(budget),
     description: description,
-    tags: tags || [], 
+    tags: tags || [],
   };
 
   const result = saveActivity(activityData);
@@ -58,7 +58,7 @@ if (tagInput && addTagBtn) {
   // Add tag on pressing "Enter" (and prevent form submission)
   tagInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
-      e.preventDefault(); 
+      e.preventDefault();
       addTagBtn.click();
     }
   });
@@ -154,7 +154,7 @@ function showRandomResult() {
 // --- 5. GLOBAL STATE VARIABLES ---
 let activityIdToDelete = null;
 let currentSearchTerm = "";
-let currentSortOrder = ""; 
+let currentSortOrder = "";
 let currentFilterTags = [];
 let currentMinBudget = null;
 let currentMaxBudget = null;
@@ -165,7 +165,7 @@ function renderFilterSidebar() {
   if (!container) return;
 
   const activities = getActivities();
-  const uniqueTags = new Set(); 
+  const uniqueTags = new Set();
 
   activities.forEach(item => {
     if (item.tags && Array.isArray(item.tags)) {
@@ -174,7 +174,7 @@ function renderFilterSidebar() {
   });
 
   container.innerHTML = "";
-  
+
   if (uniqueTags.size === 0) {
     container.innerHTML = '<span class="text-secondary small">No tags available</span>';
     return;
@@ -199,7 +199,7 @@ function renderFilterSidebar() {
       } else {
         currentFilterTags = currentFilterTags.filter(t => t !== this.value);
       }
-      renderCards(); 
+      renderCards();
     });
   });
 }
@@ -225,7 +225,7 @@ function renderCards() {
   if (currentFilterTags.length > 0) {
     activities = activities.filter(item => {
       if (!item.tags || item.tags.length === 0) return false;
-      
+
       return currentFilterTags.some(tag => item.tags.includes(tag));
     });
   }
@@ -250,8 +250,8 @@ function renderCards() {
   if (activities.length === 0) {
     container.innerHTML = `
       <div class="col-12 d-flex flex-column justify-content-center align-items-center text-center w-100" style="height: 40vh;">
-          <i class="bi bi-journal-x text-secondary" style="font-size: 3rem;"></i>
-          <span class="text-secondary fs-5 mt-2">No activities match your filters.</span>
+          <i class="bi bi-pencil-square text-secondary" style="font-size: 3rem;"></i>
+          <span class="text-secondary fs-5 mt-2">Add your first healing activity!</span>
       </div>
     `;
     return;
@@ -308,7 +308,7 @@ const searchForm = document.getElementById("search-form");
 const searchInput = document.getElementById("search-input");
 if (searchForm && searchInput) {
   searchForm.addEventListener("submit", function(e) {
-    e.preventDefault(); 
+    e.preventDefault();
     currentSearchTerm = searchInput.value;
     renderCards();
   });
@@ -336,7 +336,7 @@ if (sortAscBtn && sortDescBtn) {
   });
 }
 
-// Budget Filters 
+// Budget Filters
 const minBudgetInput = document.getElementById("filter-min-budget");
 const maxBudgetInput = document.getElementById("filter-max-budget");
 
@@ -364,7 +364,7 @@ function viewItem(id) {
 }
 
 function triggerDeleteModal(id) {
-  activityIdToDelete = id; 
+  activityIdToDelete = id;
   const deleteModal = new bootstrap.Modal(document.getElementById('globalDeleteModal'));
   deleteModal.show();
 }
@@ -377,10 +377,10 @@ if (executeDeleteBtn) {
       if (response.success) {
         const modalInstance = bootstrap.Modal.getInstance(document.getElementById('globalDeleteModal'));
         modalInstance.hide();
-        
+
         // Refresh the list and sidebar!
-        renderFilterSidebar(); 
-        renderCards(); 
+        renderFilterSidebar();
+        renderCards();
       } else {
         alert("Failed to delete: " + response.message);
       }
