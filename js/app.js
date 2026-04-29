@@ -1,4 +1,4 @@
-// 1. SAVE FUNCTION
+// SAVE FUNCTION
 function executeSave(title, imageBase64, location, budget, description) {
   const activityData = {
     title: title,
@@ -93,13 +93,13 @@ if (pickForMeBtn) {
 }
 
 function showRandomResult() {
-  // 1. Get all activities from local storage
+  // Get all activities from local storage
   const allActivities = getActivities();
 
-  // 2. Pass the array to our randomizer function
+  // Pass the array to our randomizer function
   const randomActivity = getRandomActivity(allActivities);
 
-  // 3. Grab the DOM elements inside the modal
+  // Grab the DOM elements inside the modal
   const modalTitle = document.getElementById("random-activity-title");
   const modalLocation = document.getElementById("random-activity-location");
   const modalBudget = document.getElementById("random-activity-budget");
@@ -112,45 +112,53 @@ function showRandomResult() {
     modalLocation.innerHTML = `<i class="bi bi-geo-alt-fill"></i> Unknown`;
     modalBudget.textContent = "Rp0";
     modalDesc.textContent = "You need to add some activities to your wishlist before we can pick one for you!";
-    modalImg.src = "https://via.placeholder.com/300x200?text=Add+Activities";
+    modalImg.src = "";
     return;
   }
 
-  // 4. Populate the modal with the random activity's data
+  // Populate the modal with the random activity's data
   modalTitle.textContent = randomActivity.title;
   modalLocation.innerHTML = `<i class="bi bi-geo-alt-fill"></i> ${randomActivity.location}`;
   modalBudget.textContent = `Rp ${randomActivity.budget.toLocaleString("id-ID")}`;
   modalDesc.textContent = randomActivity.description;
   
   // Use the uploaded image, or a placeholder if none exists
-  modalImg.src = randomActivity.image ? randomActivity.image : "https://via.placeholder.com/300x200?text=No+Image";
+  modalImg.src = randomActivity.image;
 }
 
-// --- STATE VARIABLE FOR DELETION ---
+// --- STATE VARIABLES ---
 let activityIdToDelete = null;
+let currentSearchTerm = "";
+let currentSortOrder = ""; // Can be "asc", "desc", or ""
 
 // UI RENDERING FUNCTIONS
-function renderCards(searchTerm = "") {
+function renderCards() {
   const container = document.getElementById("activities-container");
   if (!container) return;
 
-  // 1. Get all activities
+  // Get all activities
   let activities = getActivities();
 
-  // 2. Filter activities if a search term exists
-  if (searchTerm.trim() !== "") {
-    const lowerCaseTerm = searchTerm.toLowerCase();
+  // Filter activities based on global search state
+  if (currentSearchTerm.trim() !== "") {
+    const lowerCaseTerm = currentSearchTerm.toLowerCase();
     activities = activities.filter(item => {
-      // Check if the title or the location includes the search term
       const matchTitle = item.title.toLowerCase().includes(lowerCaseTerm);
       const matchLocation = item.location.toLowerCase().includes(lowerCaseTerm);
       return matchTitle || matchLocation;
     });
   }
 
+  // Sort activities based on global sort state
+  if (currentSortOrder === "asc") {
+    activities.sort((a, b) => a.budget - b.budget);
+  } else if (currentSortOrder === "desc") {
+    activities.sort((a, b) => b.budget - a.budget);
+  }
+
   container.innerHTML = "";
 
-  // 3. Handle Empty State
+  // Handle Empty State
   if (activities.length === 0) {
     container.innerHTML = `
       <div class="col-12 d-flex flex-column justify-content-center align-items-center text-center w-100" style="height: 40vh;">
@@ -161,11 +169,11 @@ function renderCards(searchTerm = "") {
     return;
   }
 
-  // 4. Render Cards
+  // Render Cards
   for (let i = 0; i < activities.length; i++) {
     const item = activities[i];
     const formattedBudget = item.budget.toLocaleString("id-ID");
-    const imageSrc = item.image ? item.image : "https://via.placeholder.com/300x300?text=No+Image";
+    const imageSrc = item.image;
 
     const cardHTML = `
       <div class="card shadow-sm w-100">
@@ -196,31 +204,53 @@ function renderCards(searchTerm = "") {
   }
 }
 
-// --- SEARCH FEATURE LOGIC ---
+// --- SEARCH & SORT EVENT LISTENERS ---
+
+// Search
 const searchForm = document.getElementById("search-form");
 const searchInput = document.getElementById("search-input");
 
 if (searchForm && searchInput) {
-  // Option 1: Search when the user clicks the "Search" button or hits Enter
   searchForm.addEventListener("submit", function(e) {
-    e.preventDefault(); // Prevent the page from reloading
-    renderCards(searchInput.value);
+    e.preventDefault(); 
+    currentSearchTerm = searchInput.value;
+    renderCards();
   });
 
-  // Option 2: Live search (filters instantly as the user types)
   searchInput.addEventListener("input", function(e) {
-    renderCards(e.target.value);
+    currentSearchTerm = e.target.value;
+    renderCards();
+  });
+}
+
+// Sort
+const sortAscBtn = document.getElementById("sort-asc-btn");
+const sortDescBtn = document.getElementById("sort-desc-btn");
+
+if (sortAscBtn && sortDescBtn) {
+  sortAscBtn.addEventListener("click", function() {
+    currentSortOrder = "asc";
+    sortAscBtn.className = "btn btn-dark";
+    sortDescBtn.className = "btn btn-light border";
+    renderCards();
+  });
+
+  sortDescBtn.addEventListener("click", function() {
+    currentSortOrder = "desc";
+    sortDescBtn.className = "btn btn-dark";
+    sortAscBtn.className = "btn btn-light border";
+    renderCards();
   });
 }
 
 // --- ACTION LOGIC ---
 
-// 1. EDIT: Redirect to the edit page with the ID in the URL
+// EDIT: Redirect to the edit page with the ID in the URL
 function editItem(id) {
   window.location.href = `edit-healing-wishlist.html?id=${id}`;
 }
 
-// 2. DELETE: Open Bootstrap Modal and store the ID
+// DELETE: Open Bootstrap Modal and store the ID
 function triggerDeleteModal(id) {
   activityIdToDelete = id; // Save the ID to our global variable
   const deleteModal = new bootstrap.Modal(document.getElementById('globalDeleteModal'));
