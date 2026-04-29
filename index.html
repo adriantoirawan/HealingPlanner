@@ -52,7 +52,7 @@
     </nav>
 
     <!-- Content-->
-    <div class="container-fluid mt-4" style="height: 100vh">
+    <div class="container-fluid mt-4 min-vh-100">
       <div class="row">
         <!-- Filter Sidebar -->
         <div class="col-md-3 col-lg-2 mb-4">
@@ -64,46 +64,12 @@
             </article>
 
             <article class="card-group-item">
-              <header class="card-header">
+              <header class="card-header border-bottom-0 pb-0">
                 <h6 class="title">Tags</h6>
               </header>
               <div class="filter-content">
-                <div class="card-body">
-                  <div class="form-check">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="Check1"
-                    />
-                    <label class="form-check-label" for="Check1">Outdoor</label>
-                  </div>
-
-                  <div class="form-check">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="Check2"
-                    />
-                    <label class="form-check-label" for="Check2">Indoor</label>
-                  </div>
-
-                  <div class="form-check">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="Check3"
-                    />
-                    <label class="form-check-label" for="Check3">Dating</label>
-                  </div>
-
-                  <div class="form-check">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="Check4"
-                    />
-                    <label class="form-check-label" for="Check4">Cheap</label>
-                  </div>
+                <div class="card-body d-flex flex-wrap gap-2" id="dynamic-filter-tags">
+                  <span class="text-secondary small">Loading tags...</span>
                 </div>
               </div>
             </article>
